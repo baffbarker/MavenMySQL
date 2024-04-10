@@ -1,6 +1,8 @@
 package com.caveofprogramming.db.mysql;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * Hello world!
@@ -9,10 +11,20 @@ import java.sql.SQLException;
 public class App {
 	public static void main(String[] args) {
 
+		Properties props = new Properties();
+		
+		String propertiesFile = "/config/db.properties";
+		try {
+			props.load(App.class.getResourceAsStream(propertiesFile));
+		} catch (IOException e) {
+			System.out.println("Cannot load properties" + propertiesFile);
+			return;
+		}
+		
 		var db = Database.instance();
 
 		try {
-			db.connect();
+			db.connect(props);
 		} catch (SQLException e) {
 			System.out.println("Cannont connect");
 			e.printStackTrace();
