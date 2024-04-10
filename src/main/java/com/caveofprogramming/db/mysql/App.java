@@ -1,6 +1,5 @@
 package com.caveofprogramming.db.mysql;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -13,10 +12,20 @@ public class App {
 
 		Properties props = new Properties();
 		
-		String propertiesFile = "/config/db.properties";
+		String env = System.getProperty("env");
+		
+		if(env == null) {
+			env = "dev";
+		}
+		
+		
+		String propertiesFile = String.format("/config/db.%s.properties", env);
+		
+		System.out.println(propertiesFile);
+		
 		try {
 			props.load(App.class.getResourceAsStream(propertiesFile));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("Cannot load properties" + propertiesFile);
 			return;
 		}
